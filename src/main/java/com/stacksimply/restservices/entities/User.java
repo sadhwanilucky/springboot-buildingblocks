@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
@@ -16,20 +18,27 @@ public class User {
 	@Id // Primary Key
 	@GeneratedValue // Check for more Generated Strategies
 	private Long id;
+
 	@Column(name = "USER_NAME", length = 50, nullable = false, unique = true)
+	@NotEmpty(message = "Username is Mandotory filed. Please provide the Username.")
 	private String username;
+
 	// Length is for only String,
 	// if unique then in Db also there will be index.
 	// We can have multiple unique Columns
-
+	@Size(min = 2, message = "First shuld have atleast 2 characters.")
 	@Column(name = "FIRST_NAME", length = 50, nullable = false)
 	private String firstname;
+
 	@Column(name = "LAST_NAME", length = 50, nullable = false)
 	private String lastname;
+
 	@Column(name = "EMAIL_ADDRESS", length = 50, nullable = false)
 	private String email;
+
 	@Column(name = "ROLE", length = 50, nullable = false)
 	private String role;
+
 	@Column(name = "SSN", length = 50, nullable = false, unique = true)
 	private String ssn;
 
@@ -108,7 +117,7 @@ public class User {
 		this.ssn = ssn;
 	}
 
-   //Below Is Optional
+	// Below Is Optional
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
