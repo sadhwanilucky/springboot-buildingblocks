@@ -59,15 +59,18 @@ public class User extends RepresentationModel<User> {
 	private String role;
 
 	@Column(name = "SSN", length = 50, nullable = false, unique = true)
-	//@Column(name = "SSN", length = 50, nullable = true, unique = true)
-	//@JsonIgnore//Static filtering , commenting as its part of static filtering
+	// @Column(name = "SSN", length = 50, nullable = true, unique = true)
+	// @JsonIgnore//Static filtering , commenting as its part of static filtering
 	@JsonView(Views.Internal.class)
 	private String ssn;
-	
-	
-	@OneToMany(mappedBy = "user") //It means that there will be userid column in orders table an no aditional column in users , here owner entity is order
+
+	@OneToMany(mappedBy = "user") // It means that there will be userid column in orders table an no aditional
+									// column in users , here owner entity is order
 	@JsonView(Views.Internal.class)
 	private List<Order> order;
+
+	@Column(name="ADDRESS")
+	private String address;
 
 	// No Argument Constructor is Must for JPA
 	public User() {
@@ -79,7 +82,7 @@ public class User extends RepresentationModel<User> {
 	public User(Long userid,
 			@NotEmpty(message = "Username is Mandotory filed. Please provide the Username.") String username,
 			@Size(min = 2, message = "First shuld have atleast 2 characters.") String firstname, String lastname,
-			String email, String role, String ssn, List<Order> order) {
+			String email, String role, String ssn, List<Order> order, String address) {
 		super();
 		this.userid = userid;
 		this.username = username;
@@ -89,10 +92,10 @@ public class User extends RepresentationModel<User> {
 		this.role = role;
 		this.ssn = ssn;
 		this.order = order;
+		this.address = address;
 	}
 
 	// Getter and Setter are Must for JPA
-	
 
 	public String getUsername() {
 		return username;
@@ -151,8 +154,6 @@ public class User extends RepresentationModel<User> {
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
-	
-	
 
 	public List<Order> getOrder() {
 		return order;
@@ -160,6 +161,16 @@ public class User extends RepresentationModel<User> {
 
 	public void setOrder(List<Order> order) {
 		this.order = order;
+	}
+	
+	
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	// Below Is Optional

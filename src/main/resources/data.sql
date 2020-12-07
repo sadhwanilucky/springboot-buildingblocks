@@ -1,6 +1,6 @@
-INSERT INTO USER VALUES (101,'lsadhwani@gmail.com','Lucky','Sadhwani','admin','SSN101','lsadhwani');
-INSERT INTO USER VALUES (102,'psadhwani@gmail.com','Pankaj','Sadhwani','admin','SSN102','psadhwani');
-INSERT INTO USER VALUES (103,'poonamsadhwani@gmail.com','Poonam','Sadhwani','admin','SSN103','poonamsadhwani');
+INSERT INTO USER VALUES (101,'Nagpur','lsadhwani@gmail.com','Lucky','Sadhwani','admin','SSN101','lsadhwani');
+INSERT INTO USER VALUES (102,'Pune','psadhwani@gmail.com','Pankaj','Sadhwani','admin','SSN102','psadhwani');
+INSERT INTO USER VALUES (103,'Mumbai','poonamsadhwani@gmail.com','Poonam','Sadhwani','admin','SSN103','poonamsadhwani');
 
 INSERT INTO ORDERS VALUES (20001, 'Order1',101);
 INSERT INTO ORDERS VALUES (20002, 'Order2',101);
