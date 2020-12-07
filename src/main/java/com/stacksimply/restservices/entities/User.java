@@ -16,6 +16,7 @@ import org.springframework.hateoas.RepresentationModel;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "user")
@@ -25,14 +26,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 // then name of table should be same as entity name
 //@JsonIgnoreProperties({"firstname","lastname"})//Static FIltering , here we can have multiple columns and that is difference with @JsonIgnore
 // commenting @JsonIgnoreProperties as its part of static filtering
-@JsonFilter(value = "userFIlter")
+//@JsonFilter(value = "userFIlter")//Commenting to practice @JsonView
 public class User extends RepresentationModel<User> {
 	@Id // Primary Key
 	@GeneratedValue // Check for more Generated Strategies
+	@JsonView(Views.External.class)
 	private Long userid;
 
 	@Column(name = "USER_NAME", length = 50, nullable = false, unique = true)
 	@NotEmpty(message = "Username is Mandotory filed. Please provide the Username.")
+	@JsonView(Views.External.class)
 	private String username;
 
 	// Length is for only String,
@@ -40,24 +43,30 @@ public class User extends RepresentationModel<User> {
 	// We can have multiple unique Columns
 	@Size(min = 2, message = "First shuld have atleast 2 characters.")
 	@Column(name = "FIRST_NAME", length = 50, nullable = false)
+	@JsonView(Views.External.class)
 	private String firstname;
 
 	@Column(name = "LAST_NAME", length = 50, nullable = false)
+	@JsonView(Views.External.class)
 	private String lastname;
 
 	@Column(name = "EMAIL_ADDRESS", length = 50, nullable = false)
+	@JsonView(Views.External.class)
 	private String email;
 
 	@Column(name = "ROLE", length = 50, nullable = false)
+	@JsonView(Views.Internal.class)
 	private String role;
 
 	@Column(name = "SSN", length = 50, nullable = false, unique = true)
 	//@Column(name = "SSN", length = 50, nullable = true, unique = true)
 	//@JsonIgnore//Static filtering , commenting as its part of static filtering
+	@JsonView(Views.Internal.class)
 	private String ssn;
 	
 	
 	@OneToMany(mappedBy = "user") //It means that there will be userid column in orders table an no aditional column in users , here owner entity is order
+	@JsonView(Views.Internal.class)
 	private List<Order> order;
 
 	// No Argument Constructor is Must for JPA
