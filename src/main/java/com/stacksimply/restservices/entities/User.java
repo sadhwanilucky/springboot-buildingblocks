@@ -13,12 +13,16 @@ import javax.validation.constraints.Size;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "user")
 //@Table(name="user", schema = "usermanagment")
 //Schema can be used for real time projects
 // If we are not using @table annotation in entity class
 // then name of table should be same as entity name
+@JsonIgnoreProperties({"firstname","lastname"})
 public class User extends RepresentationModel<User> {
 	@Id // Primary Key
 	@GeneratedValue // Check for more Generated Strategies
@@ -45,6 +49,8 @@ public class User extends RepresentationModel<User> {
 	private String role;
 
 	@Column(name = "SSN", length = 50, nullable = false, unique = true)
+	//@Column(name = "SSN", length = 50, nullable = true, unique = true)
+	@JsonIgnore
 	private String ssn;
 	
 	
