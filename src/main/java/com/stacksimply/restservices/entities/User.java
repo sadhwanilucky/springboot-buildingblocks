@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -22,7 +23,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //Schema can be used for real time projects
 // If we are not using @table annotation in entity class
 // then name of table should be same as entity name
-@JsonIgnoreProperties({"firstname","lastname"})
+//@JsonIgnoreProperties({"firstname","lastname"})//Static FIltering , here we can have multiple columns and that is difference with @JsonIgnore
+// commenting @JsonIgnoreProperties as its part of static filtering
+@JsonFilter(value = "userFIlter")
 public class User extends RepresentationModel<User> {
 	@Id // Primary Key
 	@GeneratedValue // Check for more Generated Strategies
@@ -50,7 +53,7 @@ public class User extends RepresentationModel<User> {
 
 	@Column(name = "SSN", length = 50, nullable = false, unique = true)
 	//@Column(name = "SSN", length = 50, nullable = true, unique = true)
-	@JsonIgnore
+	//@JsonIgnore//Static filtering , commenting as its part of static filtering
 	private String ssn;
 	
 	
