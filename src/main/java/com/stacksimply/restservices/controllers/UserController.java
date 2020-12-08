@@ -27,9 +27,14 @@ import com.stacksimply.restservices.exceptions.UserExistException;
 import com.stacksimply.restservices.exceptions.UserNotFoundException;
 import com.stacksimply.restservices.services.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController // To communicate with CLient/Browser/Rest Client
 @Validated
-@RequestMapping(value="/users")
+@RequestMapping(value = "/users")
+@Api(tags = "User Management RESTful Services", value = "UserController", description = "Controller for User Management Service") // Swagger
 public class UserController {
 
 	@Autowired
@@ -44,22 +49,33 @@ public class UserController {
 //	that is used under 2 circumstances to ask a browser to redirect a URL (status code 3xx) 
 //	or provide information about the location of a newly created resource (status code of 201)
 
+	@ApiOperation(value = "Create a new user") // Swagger
 	@PostMapping
-	public ResponseEntity<Void> createUser(@Valid @RequestBody User user,UriComponentsBuilder builder) {
+	public ResponseEntity<Void> createUser(
+			@ApiParam("User information for a new user to be created.") @Valid @RequestBody User user,
+			UriComponentsBuilder builder) {
 		try {
-		 userService.createUser(user);
-		 HttpHeaders header = new HttpHeaders();
-		 header.setLocation(builder.path("users/{id}").buildAndExpand(user.getUserid()).toUri());//returns the location i.e uri of user created,buildAndExpand simply passing the value of variable i.e id
-		 return new ResponseEntity<Void>(header,HttpStatus.CREATED);
-		}catch (UserExistException ex) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
+			userService.createUser(user);
+			HttpHeaders header = new HttpHeaders();
+			header.setLocation(builder.path("users/{id}").buildAndExpand(user.getUserid()).toUri());// returns the
+																									// location i.e uri
+																									// of user
+																									// created,buildAndExpand
+																									// simply passing
+																									// the value of
+																									// variable i.e id
+			return new ResponseEntity<Void>(header, HttpStatus.CREATED);
+		} catch (UserExistException ex) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
 		}
 	}
 
 	@GetMapping("/{id}")
-	public Optional<User> getUserById(@PathVariable("id") @Min(1) Long id) {// It means value should be atleast 1 or greater
+	public User getUserById(@PathVariable("id") @Min(1) Long id) {// It means value should be atleast 1 or greater
 		try {
-			return userService.getUserById(id);
+			Optional<User> userOptional = userService.getUserById(id);
+			User user = userOptional.get();
+			return user;
 		} catch (UserNotFoundException ex) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
 
@@ -68,7 +84,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public User updateUserById(@PathVariable("id")  Long id, @RequestBody User user) { 
+	public User updateUserById(@PathVariable("id") Long id, @RequestBody User user) {
 		try {
 			return userService.updateUserById(id, user);
 		} catch (UserNotFoundException ex) {
@@ -84,9 +100,9 @@ public class UserController {
 	@GetMapping("/byusername/{username}")
 	public User getUserByUsername(@PathVariable("username") String username) throws UserNotFoundException {
 		User user = userService.getUserByUserName(username);
-		if(user ==null) {
-			throw new UserNotFoundException("Username : '"+username+"' not found in user repository");
-		}else {
+		if (user == null) {
+			throw new UserNotFoundException("Username : '" + username + "' not found in user repository");
+		} else {
 			return user;
 		}
 	}

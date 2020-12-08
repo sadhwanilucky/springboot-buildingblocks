@@ -13,11 +13,12 @@ import javax.validation.constraints.Size;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Model to create a new user")//swagger related
 @Entity
 @Table(name = "user")
 //@Table(name="user", schema = "usermanagment")
@@ -28,22 +29,27 @@ import com.fasterxml.jackson.annotation.JsonView;
 // commenting @JsonIgnoreProperties as its part of static filtering
 //@JsonFilter(value = "userFIlter")//Commenting to practice @JsonView
 public class User extends RepresentationModel<User> {
+	
 	@Id // Primary Key
 	@GeneratedValue // Check for more Generated Strategies
 	@JsonView(Views.External.class)
+	@ApiModelProperty(notes = "userid - Unique identifier of user", required = true, position = 1)
 	private Long userid;
 
+	@Size(min = 2,max = 50)
 	@Column(name = "USER_NAME", length = 50, nullable = false, unique = true)
 	@NotEmpty(message = "Username is Mandotory filed. Please provide the Username.")
 	@JsonView(Views.External.class)
+	@ApiModelProperty(notes = "username of user", required = false, position = 2)//For swagger
 	private String username;
 
 	// Length is for only String,
 	// if unique then in Db also there will be index.
 	// We can have multiple unique Columns
-	@Size(min = 2, message = "First shuld have atleast 2 characters.")
+	@Size(min = 2,max = 50, message = "First shuld have atleast 2 characters.")
 	@Column(name = "FIRST_NAME", length = 50, nullable = false)
 	@JsonView(Views.External.class)
+	@ApiModelProperty(notes = "First name of the User.", example = "Lucky", required = false, position = 3)//Swagger
 	private String firstname;
 
 	@Column(name = "LAST_NAME", length = 50, nullable = false)
@@ -62,6 +68,7 @@ public class User extends RepresentationModel<User> {
 	// @Column(name = "SSN", length = 50, nullable = true, unique = true)
 	// @JsonIgnore//Static filtering , commenting as its part of static filtering
 	@JsonView(Views.Internal.class)
+	@ApiModelProperty(notes = "SSN of the User.", example = "SSN1010", required = true, position = 4)
 	private String ssn;
 
 	@OneToMany(mappedBy = "user") // It means that there will be userid column in orders table an no aditional
